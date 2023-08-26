@@ -89,12 +89,30 @@ model.exports = {
 
             res.json(user)
             return;
+
         } catch(err) {
             res.status(500).json(err);
         }
     },
 
     // TODO: Remove a friend 
+    async removeFriend(req, res) {
+        try {
+            const user = await user.findOneAndUpdate(
+                {_id: req.params.userId},
+                {$pull:{friends: req.params.friendId}},
+                {new: true}
+            )
 
+            if(!user){
+                return res.status(404).json({message:`Could not find that user`});
+            }
 
+            res.json(user)
+
+        } catch(err) {
+            res.status(500).json(err);
+        }
+    },
+    
 }
