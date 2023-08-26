@@ -1,6 +1,6 @@
 const { user, thoughts } = require("../models");
 
-model.exports = {
+const userController = {
     // TODO: Get all users ----------
     async getAllUsers(req, res) {
         try {
@@ -115,4 +115,5 @@ model.exports = {
         }
     },
     
-}
+};
+module.exports = userController;
