@@ -53,4 +53,32 @@ model.exports = {
         }
     },
 
+    // TODO: Delete a single user and all users thoughts
+    async deleteUser(req, res) {
+        try {
+            const deletedUser = await user.findByIdAndDelete({ _id: req.params.userId })
+            const deleteThoughts = await thoughts.remove({
+                _id:{
+                    $in:[deletedUser.thoughts]
+                }
+            })
+
+            if (!user) {
+                return res.status(404).json({ message: `No user with that ID` });
+            }
+
+            res.json({deletedUser, deleteThoughts})
+            return;
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    // TODO: Add a friend 
+    
+    
+
+    // TODO: Remove a friend 
+
+
 }
