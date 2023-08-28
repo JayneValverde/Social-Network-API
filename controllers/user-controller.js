@@ -1,7 +1,7 @@
 const { user, thoughts } = require("../models");
 
 const userController = {
-    // TODO: Get all users ----------
+    // Get all users ----------
     async getAllUsers(req, res) {
         try {
             const users = await user
@@ -28,7 +28,7 @@ const userController = {
         }
     },
 
-    // TODO: Get a single user (MAY NEED SOME PARAMS WORK) 
+    // Get a single user (MAY NEED SOME PARAMS WORK) 
     async getSingleUser(req, res) {
         try {
             const user = await user.fineOne({ _id: req.params.userId })
@@ -53,7 +53,7 @@ const userController = {
         }
     },
 
-    // TODO: Delete a single user and all users thoughts
+    // Delete a single user and all users thoughts
     async deleteUser(req, res) {
         try {
             const deletedUser = await user.findByIdAndDelete({ _id: req.params.userId })
@@ -74,7 +74,7 @@ const userController = {
         }
     },
 
-    // TODO: Add a friend 
+    // Add a friend 
     async addFriend(req, res) {
         try {
             const user = await user.findOneAndUpdate(
@@ -95,7 +95,7 @@ const userController = {
         }
     },
 
-    // TODO: Remove a friend 
+    // Remove a friend 
     async removeFriend(req, res) {
         try {
             const user = await user.findOneAndUpdate(
