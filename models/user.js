@@ -6,12 +6,12 @@ const UserSchema = new Schema(
             type: String,
             unique: true,
             trim: true,
-            required: "Username is Required",
+            required: true,
         },
         email: {
             type: String,
             unique: true,
-            required: "Username is Required",
+            required: true,
             match: `/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/`,
         },
 
@@ -32,7 +32,10 @@ const UserSchema = new Schema(
         toJSON: { virtuals: true },
         id: false,
     }
-);
+)
+
+UserSchema.virtual('friendCount').get(function(){
+    return this.friends.length})
 
 const User = model('user', UserSchema);
 

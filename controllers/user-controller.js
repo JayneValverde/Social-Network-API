@@ -1,4 +1,4 @@
-const { user, thoughts } = require("../models");
+const { user, thoughts } = require("../models/");
 
 const userController = {
     // Get all users ----------
@@ -31,7 +31,7 @@ const userController = {
     // Get a single user (MAY NEED SOME PARAMS WORK) 
     async getSingleUser(req, res) {
         try {
-            const user = await user.fineOne({ _id: req.params.userId })
+            const user = await user.fineOne({ _id: req.params.id })
                 .populate({
                     path: "thoughts",
                     select:"-__v",
@@ -53,13 +53,24 @@ const userController = {
         }
     },
 
+    // create new user
+    async createNewUser({body}, res) {
+        try{ 
+            const user = await user.create(body)
+            res.json(user)
+            return;
+        } catch(err){
+            res.status(500).json(err)
+        }
+    },
+
     // Delete a single user and all users thoughts
     async deleteUser(req, res) {
         try {
             const deletedUser = await user.findByIdAndDelete({ _id: req.params.userId })
             const deleteThoughts = await thoughts.remove({
                 _id:{
-                    $in:[deletedUser.thoughts]
+                    $in:deletedUser.thoughts
                 }
             })
 

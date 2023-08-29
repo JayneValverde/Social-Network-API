@@ -1,12 +1,12 @@
 const { thoughts, user } = require("../models");
-const Thought = require('../models/thoughts');
+// const Thought = require('../models/thoughts');
 
 const thoughtsController = {
 
     // add thought to user
     async addThought({body}, res){
         try{
-            const {_id} = await Thought.create(body)
+            const {_id} = await thoughts.create(body)
 
             if(!_id){
                 return res.status(500).JSON({message:"Could not create thought. Check Server."})
@@ -34,7 +34,7 @@ const thoughtsController = {
     // remove thought
     async removeThought({params}, res){
         try{
-            const deletedThought = await Thought.findOneAndDelete({_id: params.thoughtId})
+            const deletedThought = await thoughts.findOneAndDelete({_id: params.thoughtId})
             if(!deletedThought){
                 return res.status(404).json({message:"Could not find a comment with this id"}) 
             }
@@ -51,7 +51,7 @@ const thoughtsController = {
     // To Get One thought and include reaction 
     async getOneThought({params}, res) {
         try{
-            const thought = await Thought.findOne({_id: params.thoughtId}).populate({
+            const thought = await thought.findOne({_id: params.thoughtsId}).populate({
                 path: 'reactions',
                 select:'-__v'
                 })
@@ -71,7 +71,7 @@ const thoughtsController = {
     // Get all thoughts
     async getAllThoughts(req,res) {
         try{
-            const thought = await Thought.find().populate({
+            const thought = await thoughts.find().populate({
                 path: 'reactions',
                 select: '-__v'
                 })
@@ -91,8 +91,8 @@ const thoughtsController = {
     // add reaction
     async addReaction({params, body}, res) {
         try{
-            const reaction = await Thought.findOneAndUpdate(
-                {_id : params.thoughtId},
+            const reaction = await thoughts.findOneAndUpdate(
+                {_id : params.thoughtsId},
                 {$push: {reactions: body}},
                 {new: true, runValidators: true}
             )
@@ -111,8 +111,8 @@ const thoughtsController = {
     // Update a single thought
     async updateThought({params,body},res){
         try{
-            const thought = await Thought.findByIdAndUpdate(
-                {_id: params.thoughtId},
+            const thought = await thoughts.findByIdAndUpdate(
+                {_id: params.thoughtsId},
                 body, 
                 {new: true, runValidators: true}
             )
@@ -131,8 +131,8 @@ const thoughtsController = {
     // Remove a reaction 
     async removeReaction({params, query},res){
         try{
-            const thought = await Thought.findByIdAndUpdate(
-                {_id: params.thoughtId},
+            const thought = await thoughts.findByIdAndUpdate(
+                {_id: params.thoughtsId},
                 {$pull: {reactions: { reactionId: query.reactionId }}},
                 {new:true}
             )
