@@ -132,15 +132,15 @@ const thoughtsController = {
     },
 
     // Remove a reaction 
-    async removeReaction({params, query},res){
+    async removeReaction({params},res){
         try{
             const thought = await Thoughts.findByIdAndUpdate(
                 {_id: params.thoughtsId},
-                {$pull: {reactions: { reactionId: query.reactionId }}},
+                {$pull: {reactions: { reactionId: params.reactionId }}},
                 {new:true}
             )
 
-            if(!Thoughts){
+            if(!thought){
                 return res.status(404).json({message: "Could not find that thought"})
             }
 
