@@ -9,11 +9,11 @@ const thoughtsController = {
             const {_id} = await Thoughts.create(body)
 
             if(!_id){
-                return res.status(500).JSON({message:"Could not create thought. Check Server."})
+                return res.status(500).JSON({message:"Could not create thought. Check Server"})
             }
 
             const user = await User.findOneAndUpdate(
-                {_id: body.id},
+                {_id: body.userId},
                 {$push: {thoughts: _id}},
                 {new: true, runValidators: true}
             )
@@ -28,19 +28,22 @@ const thoughtsController = {
 
         catch(err) {
             res.status(500).json({message: "Something went wrong with the server", error: err})
+            console.log(err)
         }
     },
 
     // remove thought
     async removeThought({params}, res){
         try{
-            const deletedThought = await Thoughts.findOneAndDelete({_id: params.thoughtId})
-            if(!deletedThought){
+            const deletedThoughts = await Thoughts.findOneAndDelete({_id: params.thoughtsId})
+            
+            if(!deletedThoughts){
                 return res.status(404).json({message:"Could not find a comment with this id"}) 
+                console.log(err)
             }
             
-            res.json(deletedThought)
-            return
+            res.json(deletedThoughts)
+            return;
         }
 
         catch(err) {
