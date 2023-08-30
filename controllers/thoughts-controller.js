@@ -1,4 +1,4 @@
-const { thoughts, user } = require("../models");
+const { Thoughts, User } = require("../models");
 // const Thought = require('../models/thoughts');
 
 const thoughtsController = {
@@ -6,19 +6,19 @@ const thoughtsController = {
     // add thought to user
     async addThought({body}, res){
         try{
-            const {_id} = await thoughts.create(body)
+            const {_id} = await Thoughts.create(body)
 
             if(!_id){
                 return res.status(500).JSON({message:"Could not create thought. Check Server."})
             }
 
-            const user = await user.findOneAndUpdate(
-                {_id: body.userId},
+            const user = await User.findOneAndUpdate(
+                {_id: body.id},
                 {$push: {thoughts: _id}},
                 {new: true, runValidators: true}
             )
 
-            if(!user){
+            if(!User){
                 return res.status(404).message({message:"Could not find any user with that id"})
             }
 
@@ -34,7 +34,7 @@ const thoughtsController = {
     // remove thought
     async removeThought({params}, res){
         try{
-            const deletedThought = await thoughts.findOneAndDelete({_id: params.thoughtId})
+            const deletedThought = await Thoughts.findOneAndDelete({_id: params.thoughtId})
             if(!deletedThought){
                 return res.status(404).json({message:"Could not find a comment with this id"}) 
             }
@@ -51,13 +51,13 @@ const thoughtsController = {
     // To Get One thought and include reaction 
     async getOneThought({params}, res) {
         try{
-            const thought = await thought.findOne({_id: params.thoughtsId}).populate({
+            const thought = await Thoughts.findOne({_id: params.thoughtsId}).populate({
                 path: 'reactions',
                 select:'-__v'
                 })
                 .select('-__v');
 
-            if(!thought){
+            if(!Thoughts){
                 return res.status(404).json({message:"Could not find that thought"})
             }
 
@@ -71,13 +71,13 @@ const thoughtsController = {
     // Get all thoughts
     async getAllThoughts(req,res) {
         try{
-            const thought = await thoughts.find().populate({
+            const thought = await Thoughts.find().populate({
                 path: 'reactions',
                 select: '-__v'
                 })
                 .select('-__v');
 
-            if(!thought.length){
+            if(!Thoughts.length){
                 return res.status(404).json({message:"There are no thoughts yet"})
             }
 
@@ -91,7 +91,7 @@ const thoughtsController = {
     // add reaction
     async addReaction({params, body}, res) {
         try{
-            const reaction = await thoughts.findOneAndUpdate(
+            const reaction = await Thoughts.findOneAndUpdate(
                 {_id : params.thoughtsId},
                 {$push: {reactions: body}},
                 {new: true, runValidators: true}
@@ -111,13 +111,13 @@ const thoughtsController = {
     // Update a single thought
     async updateThought({params,body},res){
         try{
-            const thought = await thoughts.findByIdAndUpdate(
+            const thought = await Thoughts.findByIdAndUpdate(
                 {_id: params.thoughtsId},
                 body, 
                 {new: true, runValidators: true}
             )
 
-            if(!thought){
+            if(!Thoughts){
                 return res.status(404).json({message:"No thought found with this Id"})
             }
 
@@ -131,13 +131,13 @@ const thoughtsController = {
     // Remove a reaction 
     async removeReaction({params, query},res){
         try{
-            const thought = await thoughts.findByIdAndUpdate(
+            const thought = await Thoughts.findByIdAndUpdate(
                 {_id: params.thoughtsId},
                 {$pull: {reactions: { reactionId: query.reactionId }}},
                 {new:true}
             )
 
-            if(!thought){
+            if(!Thoughts){
                 return res.status(404).json({message: "Could not find that thought"})
             }
 

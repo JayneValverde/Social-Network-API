@@ -31,7 +31,7 @@ const userController = {
     // Get a single user (MAY NEED SOME PARAMS WORK) 
     async getSingleUser(req, res) {
         try {
-            const user = await User.findOne({ _id: req.params.userId})
+            const user = await User.findOne({ _id: req.params.id})
                 .populate({
                     path: "thoughts",
                     select:"-__v",
@@ -66,23 +66,24 @@ const userController = {
     },
 
     // Delete a single user and all users thoughts
-    async deleteUser(req, res) {
+    async deletedUser({params}, res) {
         try {
-            const deletedUser = await User.findByIdAndDelete({ _id: req.params.userId })
-            const deleteThoughts = await Thoughts.remove({
+            const deletedUser = await User.findByIdAndDelete({ _id: params.id })
+            const deletedThoughts = await Thoughts.deleteMany({
                 _id:{
                     $in:deletedUser.thoughts
                 }
             })
 
-            if (!User) {
-                return res.status(404).json({ message: `No user with that ID` });
-            }
+            // if (!User) {
+            //     return res.status(404).json({ message: `No user with that ID` });
+            // }
 
-            res.json({deletedUser, deleteThoughts})
+            res.json({deletedUser, deletedThoughts})
             return;
         } catch (err) {
-            res.status(500).json(err);
+            res.status(404).json({message: 'Could not find that user', err});
+            console.log(err)
         }
     },
 
@@ -111,7 +112,7 @@ const userController = {
     async removeFriend(req, res) {
         try {
             const user = await User.findOneAndUpdate(
-                {_id: req.params.userId},
+                {_id: req.params.id},
                 {$pull:{friends: req.params.friendId}},
                 {new: true}
             )
