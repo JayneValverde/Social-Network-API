@@ -1,10 +1,10 @@
-const { user, thoughts } = require("../models/");
+const { User, Thoughts } = require("../models/");
 
 const userController = {
     // Get all users ----------
     async getAllUsers(req, res) {
         try {
-            const users = await user
+            const users = await User
                 .find()
                 .populate({
                     path: "thoughts",
@@ -16,7 +16,7 @@ const userController = {
                 })
                 .select("-__v");
                 
-            if(!user) {
+            if(!User) {
                 return res.status(404).json({ message: "There are no users yet" });
             }
 
@@ -31,7 +31,7 @@ const userController = {
     // Get a single user (MAY NEED SOME PARAMS WORK) 
     async getSingleUser(req, res) {
         try {
-            const user = await user.fineOne({ _id: req.params.id })
+            const user = await User.findOne({ _id: req.params.userId})
                 .populate({
                     path: "thoughts",
                     select:"-__v",
@@ -42,7 +42,7 @@ const userController = {
                 })
                 .select("-__v");
             
-            if (!user) {
+            if (!User) {
                 return res.status(404).json({ message: `Couldn't find that user` });
             }
 
@@ -50,13 +50,14 @@ const userController = {
             return;
         } catch (err) {
             res.status(500).json(err);
+            console.log(err);
         }
     },
 
     // create new user
     async createNewUser({body}, res) {
         try{ 
-            const user = await user.create(body)
+            const user = await User.create(body)
             res.json(user)
             return;
         } catch(err){
@@ -67,14 +68,14 @@ const userController = {
     // Delete a single user and all users thoughts
     async deleteUser(req, res) {
         try {
-            const deletedUser = await user.findByIdAndDelete({ _id: req.params.userId })
-            const deleteThoughts = await thoughts.remove({
+            const deletedUser = await User.findByIdAndDelete({ _id: req.params.userId })
+            const deleteThoughts = await Thoughts.remove({
                 _id:{
                     $in:deletedUser.thoughts
                 }
             })
 
-            if (!user) {
+            if (!User) {
                 return res.status(404).json({ message: `No user with that ID` });
             }
 
@@ -88,13 +89,13 @@ const userController = {
     // Add a friend 
     async addFriend(req, res) {
         try {
-            const user = await user.findOneAndUpdate(
+            const user = await User.findOneAndUpdate(
                 {_id: req.params.userId},
                 {$addToSet: {friends: req.body.friendId}},
                 {new:true, runValidators: true}
             )
 
-            if(!user){
+            if(!User){
                 return res.status(404).json({message:`No user found with this id`});
             }
 
@@ -109,13 +110,13 @@ const userController = {
     // Remove a friend 
     async removeFriend(req, res) {
         try {
-            const user = await user.findOneAndUpdate(
+            const user = await User.findOneAndUpdate(
                 {_id: req.params.userId},
                 {$pull:{friends: req.params.friendId}},
                 {new: true}
             )
 
-            if(!user){
+            if(!User){
                 return res.status(404).json({message:`Could not find that user`});
             }
 
