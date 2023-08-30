@@ -145,7 +145,7 @@ const thoughtsController = {
             }
 
             res.json(thought)
-            return;
+        
         } catch(err){
             res.status(500).json({message: "something went wrong with the server", error: err})
         }
