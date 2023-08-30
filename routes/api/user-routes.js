@@ -11,10 +11,10 @@ const{
 // /api/users
 router.route('/').get(getAllUsers).post(createNewUser);
 
-// /api/user/:id
+// /api/users/:id
 router.route('/:id').get(getSingleUser).delete(deleteUser);
 
-// /api/user/:id/friends/:friendId
+// /api/users/:id/friends/:friendId
 router.route('/:id/friends/:friendId').post(addFriend).delete(removeFriend);
 
 
