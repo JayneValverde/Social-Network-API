@@ -14,7 +14,10 @@ An API built for a social network web application that uses a NoSQL database. Th
 * [User Story](#user-story)
 * [Acceptance Criteria](#acceptance-criteria)
 * [Installation](#installation)
-* [Tests](#tests)
+* [Users](#users)
+* [Thoughts](#thoughts)
+* [Friends](#friends)
+* [Reactions](#reactions)
 * [License](#license)
 * [Resources](#resources)
 * [Questions](#questions)
@@ -57,8 +60,35 @@ In order to set up this project, take the followeing steps:
 
 
 
-## Tests: 
+## Users: 
+| HTTP Method 	| Route                                   	| Description     
+-------------   |------------------------------------------ |------------------
+| GET           | http://localhost:3001/api/users          	| To `GET` all users
+| GET           | http://localhost:3001/api/users/:id       | To `GET` a Single User with `userId`
+| POST          | http://localhost:3001/api/users           | To Create a new user
+| PUT           | http://localhost:3001/api/users/:id       | To Update a Single User with their `userId`
+| DELETE        | http://localhost:3001/api/users/:id       | To Delete a single user from the DB
 
+## Thoughts: 
+| HTTP Method 	| Route                                   	| Description     
+-------------   |------------------------------------------ |------------------
+| GET           | http://localhost:3001/api/thoughts        | To `GET`All Thoughts
+| GET           | http://localhost:3001/api/thoughts/:id    | To `GET` One thought by its `thoughtsId`
+| POST          | http://localhost:3001/api/thoughts        | To Create a new Thought 
+| PUT           | http://localhost:3001/api/thoughts/:id    | To Update a Thought bye its `thoughtsId`
+| DELETE        | http://localhost:3001/api/thoughts/:id    | To Delete a Thought by its `thoughtsId`
+
+## Friends:
+| HTTP Method 	| Route                                   	                    | Description     
+-------------   |-------------------------------------------------------------- |------------------
+| POST          | http://localhost:3001/api/users/:id/friends/:friendId         | To add a friend by `userId` to `friendId`
+| GET           | http://localhost:3001/api/users/:id/friends/:friendId         | To remove a friend `friendId` from a users `userId`
+
+## Reactions: 
+| HTTP Method 	| Route                                   	                             | Description     
+-------------   |----------------------------------------------------------------------- |------------------
+| POST          | http://localhost:3001/api/thoughts/:thoughtId/reactions                | Creates a reaction stored in a single thought's reaction array field 
+| DELETE        | http://localhost:3001/api/thoughts/:thoughtId/reactions/:reactionsId   | Removes a reaction by the reaction's `reactionId` value. 
 
 ## License: 
 
