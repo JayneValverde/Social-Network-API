@@ -91,25 +91,6 @@ const thoughtsController = {
         }
     },
 
-    // add reaction
-    async addReaction({params, body}, res) {
-        try{
-            const reaction = await Thoughts.findOneAndUpdate(
-                {_id : params.thoughtsId},
-                {$push: {reactions: body}},
-                {new: true, runValidators: true}
-            )
-
-            if(!reaction){
-                return res.status(404).json({message :"No such thought found with this Id"})
-            }
-
-            res.json(reaction)
-            return;
-        } catch(err){
-            res.status(500).json(err)
-        }
-    },
 
     // Update a single thought
     async updateThought({params,body},res){
@@ -130,6 +111,27 @@ const thoughtsController = {
             res.status(500).json(err)
         }
     },
+
+    // add reaction
+    async addReaction({params, body}, res) {
+        try{
+            const reaction = await Thoughts.findOneAndUpdate(
+                {_id : params.thoughtsId},
+                {$push: {reactions: body}},
+                {new: true, runValidators: true}
+            )
+
+            if(!reaction){
+                return res.status(404).json({message :"No such thought found with this Id"})
+            }
+
+            res.json(reaction)
+            return;
+        } catch(err){
+            res.status(500).json(err)
+        }
+    },
+
 
     // Remove a reaction 
     async removeReaction({params},res){
