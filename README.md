@@ -91,10 +91,12 @@ In order to set up this project, take the followeing steps:
 | DELETE        | http://localhost:3001/api/thoughts/:thoughtId/reactions/:reactionsId   | Removes a reaction by the reaction's `reactionId` value. 
 
 ## License: 
-
+This project is licensed under MIT
 
 ## Resources:
+**ASK BCS** <br>
 
+**MODULE 18** <br>
 
 ## Questions: 
 Follow me on GitHub at [JayneValverde](https://github.com/JayneValverde) <br>
